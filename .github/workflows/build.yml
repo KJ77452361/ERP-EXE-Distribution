@@ -1,0 +1,29 @@
+name: Build ERP Installer
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install NSIS
+      run: |
+        choco install nsis -y
+
+    - name: Build Installer
+      run: |
+        cd ${{ github.workspace }}
+        makensis installer.nsi
+
+    - name: Upload Installer Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ERP-Installer
+        path: ERP-Installer.exe
